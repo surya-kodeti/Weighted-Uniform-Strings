@@ -1,0 +1,62 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+from collections import defaultdict
+
+# Complete the weightedUniformStrings function below.
+def weightedUniformStrings(s, queries):
+    q = "abcdefghijklmnopqrstuvwxyz"
+    r=[]
+    z=[]
+    de = defaultdict()
+    for i in range(len(s)):
+        c=0
+        if i==0 or (i==z[-1] and i<len(s)):
+            for j in range(i,len(s),1):
+                if s[i]==s[j]:
+                    c+=1
+                else:
+                    break
+            temp=q.index(s[i])+1
+            i=i+c
+            z.append(i)
+            if temp in de and de[temp]>c:
+                continue
+            else:
+                de[temp]=c
+    print(de)
+    for i in queries:
+        c=0
+        for j in de:
+            if i%j==0 and i<=j*de[j]:
+                c=1
+        if c==1:
+            r.append("Yes")
+        else:
+            r.append("No")
+    
+    return r
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    s = input()
+
+    queries_count = int(input())
+
+    queries = []
+
+    for _ in range(queries_count):
+        queries_item = int(input())
+        queries.append(queries_item)
+
+    result = weightedUniformStrings(s, queries)
+
+    fptr.write('\n'.join(result))
+    fptr.write('\n')
+
+    fptr.close()
